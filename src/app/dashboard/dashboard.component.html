@@ -1,0 +1,45 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col"><strong>#</strong></th>
+            <th scope="col"><strong>Title</strong></th>
+            <th scope="col"><strong>Assignee</strong></th>
+            <th scope="col" style="cursor:pointer;" (click)="sortArray()"><strong>Status <i class="fa fa-sort-down"></i></strong></th>
+            <th scope="col"><strong>Actions</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let todo of myList | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize;index as i;">
+            <th scope="row">{{todo.id}}</th>
+            <td>{{todo.title}}</td>
+            <td>{{todo.Assignee}}</td>
+            <td *ngIf="todo.completed == false" style="color:grey">Progress</td>
+            <td *ngIf="todo.completed == true" style="color:green">Done</td>
+            <td style="min-width:100px;">
+                <button (click)="deleteData(todo.id,i)" class="btn btn-danger pull-right " style="font-size:8px; float:right;"><i class="fa fa-trash-o"  style="font-size:10px;"></i></button>
+                <button (click)="openModal(template,i)" class="btn btn-primary pull-right mr-1" style="font-size:8px; float: right;"><i class="fa fa-pencil"  style="font-size:10px;"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div class="row" style="position: absolute;right:30px; ">
+    <ngb-pagination [collectionSize]="myList.length " [(page)]="page" [maxSize]="10 " [rotate]="true " [ellipses]="false" [boundaryLinks]="true"></ngb-pagination>
+</div>
+
+
+<ng-template #template>
+    <div class="modal-header">
+        Title
+    </div>
+    <form #form="ngForm" (ngSubmit)="updateTitle(form.value)" ngNativeValidate>
+        <div class="modal-body text-center ">
+
+            <input name="title" class="form-control" required ngModel="{{fillTitle}}">
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-danger" type="button" (click)="closeModal()">Close</button>
+        </div>
+    </form>
+</ng-template>
